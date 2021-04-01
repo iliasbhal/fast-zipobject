@@ -32,7 +32,11 @@
     "trailingComma": "es5"
   },
   "name": "fast-zipobject",
-  "author": "Ilias",
+  "author": "iliasbhal <ilias.bhal@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iliasbhal/fast-zipobject.git"
+  },
   "module": "dist/fast-zipobject.esm.js",
   "size-limit": [
     {
