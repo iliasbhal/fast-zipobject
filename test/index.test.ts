@@ -96,9 +96,9 @@ describe('fastZipObject', () => {
     expect(zipped[sampleProp]).toEqual(expectedValue);
   });
 
-  testSpeedImprovement(3, 1.5);
-  testSpeedImprovement(5, 2);
-  testSpeedImprovement(10, 2);
+  testSpeedImprovement(3, 1.4);
+  testSpeedImprovement(5, 1.9);
+  testSpeedImprovement(10, 1.9);
   testSpeedImprovement(20, 3);
   testSpeedImprovement(30, 4);
 
