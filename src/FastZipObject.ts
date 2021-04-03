@@ -24,9 +24,9 @@ export class FastZipObject {
   }
 
   static createSimpleZipObject(props: string[], values: string[]) {
-    let obj :Record<string, unknown> = {};
+    let obj: Record<string, unknown> = {};
 
-    for(let i = 0; i < props.length; i++) {
+    for (let i = 0; i < props.length; i++) {
       obj[props[i]] = values[i];
     }
 
@@ -37,21 +37,26 @@ export class FastZipObject {
     const valuesCopy = [...values];
     const propsCopy = [...props];
 
-    return new Proxy({},  {
-      get(target: any, prop: string) {
-        return target[prop] 
-          || valuesCopy[FastZipObject.getZipIndexOfProp(propsCopy)[prop]]
-      },
-      ownKeys: function() {
-        return propsCopy;
-      },
-      getOwnPropertyDescriptor() {
-        return {
-          enumerable: true,
-          configurable: true,
-          writable: true,
-        };
+    return new Proxy(
+      {},
+      {
+        get(target: any, prop: string) {
+          return (
+            target[prop] ||
+            valuesCopy[FastZipObject.getZipIndexOfProp(propsCopy)[prop]]
+          );
+        },
+        ownKeys: function() {
+          return propsCopy;
+        },
+        getOwnPropertyDescriptor() {
+          return {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+          };
+        },
       }
-    });
+    );
   }
 }
