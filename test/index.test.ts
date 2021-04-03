@@ -1,32 +1,61 @@
 import fastZipObject from '../src';
+import { FastZipObject } from '../src/FastZipObject';
 import { performance } from 'perf_hooks';
 import * as _ from 'lodash';
 
 describe('fastZipObject', () => {
   it('should access attributes', () => {
-    const props = ['prop1', 'prop2'];
-    const values = ['hello', 'john doe'];
-
+    const { props, values } = createPropsAndValues(FastZipObject.LENGTH_THRESHOLD);
     const zipped = fastZipObject(props, values);
-    expect(zipped.prop1).toEqual('hello');
-    expect(zipped.prop2).toEqual('john doe');
+
+    for( let i = 0; i < props.length; i++) {
+      const prop = props[i];
+      const value = values[i];
+      expect(zipped[prop]).toEqual(value);
+    }
   });
 
   it('should return undefined', () => {
-    const props = ['prop1', 'prop2'];
-    const values = ['hello', 'john doe'];
+    const { props, values } = createPropsAndValues(FastZipObject.LENGTH_THRESHOLD);
 
     const zipped = fastZipObject(props, values);
     expect(zipped.anotherProp).toEqual(undefined);
   });
 
   it('should update attribute', () => {
-    const props = ['prop1', 'prop2'];
-    const values = ['hello', 'john doe'];
-
+    const { props, values } = createPropsAndValues(FastZipObject.LENGTH_THRESHOLD);
     const zipped = fastZipObject(props, values);
+
     zipped.prop1 = 'bye';
+
     expect(zipped.prop1).toEqual('bye');
+  });
+
+  it('should work with Object.getOwnPropertyNames', () => {
+    const { props, values } = createPropsAndValues(FastZipObject.LENGTH_THRESHOLD);
+    const zipped = fastZipObject(props, values);
+    const properties = Object.getOwnPropertyNames(zipped)
+
+    expect(Array.isArray(properties)).toBeTruthy();
+    expect(properties).toMatchObject(props);
+  });
+
+  it('should work with Object.keys', () => {
+    const { props, values } = createPropsAndValues(FastZipObject.LENGTH_THRESHOLD);
+    const zipped = fastZipObject(props, values);
+    const properties = Object.keys(zipped)
+
+    expect(Array.isArray(properties)).toBeTruthy();
+    expect(properties).toMatchObject(props);
+  });
+
+  it('should work with Object.values', () => {
+    const { props, values } = createPropsAndValues(FastZipObject.LENGTH_THRESHOLD);
+    const zipped = fastZipObject(props, values);
+    const properties = Object.values(zipped)
+
+    expect(Array.isArray(properties)).toBeTruthy();
+    expect(properties).toMatchObject(values);
   });
 
   it('should not references of props to avoid memory leaks', () => {
@@ -49,6 +78,7 @@ describe('fastZipObject', () => {
     values.splice(0);
 
     expect(zipped[sampleProp]).toEqual(expectedValue);
+  })
 
   testSpeedImprovement(3, 1.5);
   testSpeedImprovement(5, 2);
