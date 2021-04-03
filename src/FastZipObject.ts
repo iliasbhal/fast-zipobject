@@ -1,5 +1,5 @@
 export class FastZipObject {
-  static zipIndexesByProps = new Map<string[], Record<string, number>>();
+  static zipIndexesByProps = new WeakMap<string[], Record<string, number>>();
   static getZipIndexOfProp = (headers: string[]) => {
     let memoizedIndexes = FastZipObject.zipIndexesByProps.get(headers);
     if (memoizedIndexes) {
