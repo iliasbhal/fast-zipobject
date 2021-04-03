@@ -97,7 +97,7 @@ describe('fastZipObject', () => {
   });
 
   testSpeedImprovement(3, 1.4);
-  testSpeedImprovement(5, 1.8);
+  testSpeedImprovement(5, 1.5);
   testSpeedImprovement(10, 1.9);
   testSpeedImprovement(20, 3);
   testSpeedImprovement(30, 4);
