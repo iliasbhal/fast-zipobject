@@ -29,29 +29,42 @@ describe('fastZipObject', () => {
     expect(zipped.prop1).toEqual('bye');
   });
 
-  it('should be faster than lodash', () => {
-    testSpeedImprovement(5,1.1);
-    testSpeedImprovement(10,2);
-    testSpeedImprovement(20,3);
 
 
-    function testSpeedImprovement(numberOfProps: number, expectedSpeedYield: number) {
-      const props = _.range(0, numberOfProps).map((num) => `prop${num}`);
-      const values = _.range(0, numberOfProps).map((num) => `values${num}`);
+  testSpeedImprovement(3, 1.5);
+  testSpeedImprovement(5, 2);
+  testSpeedImprovement(10, 2);
+  testSpeedImprovement(20, 3);
+  testSpeedImprovement(30, 4);
   
-      const startLodash = performance.now();
-      for (let i = 0; i < 1000000; i++) {
-        _.zipObject(props, values);
-      }
-      const lodashSpeed = performance.now() - startLodash;
-  
-  
-      const startFastZip = performance.now();
-      for (let i = 0; i < 1000000; i++) {
-        fastZipObject(props, values);
-      }
-      const fastZipSpeed = performance.now() - startFastZip;
-      expect(fastZipSpeed * expectedSpeedYield).toBeLessThan(lodashSpeed);
+  function testSpeedImprovement(numberOfProps: number, expectedSpeedYield: number) {
+      it(`should be faster than lodash (array of ${numberOfProps} should be ${expectedSpeedYield}x faster)`, () => {
+        const { props, values } = createPropsAndValues(numberOfProps);
+    
+        const startLodash = performance.now();
+        for (let i = 0; i < 1000000; i++) {
+          _.zipObject(props, values);
+        }
+        const lodashSpeed = performance.now() - startLodash;
+    
+    
+        const startFastZip = performance.now();
+        for (let i = 0; i < 1000000; i++) {
+          fastZipObject(props, values);
+        }
+
+        const fastZipSpeed = performance.now() - startFastZip;
+        expect(fastZipSpeed * expectedSpeedYield).toBeLessThan(lodashSpeed);
+      });
     }
-  })
 });
+
+function createPropsAndValues(length: number) {
+  const props = _.range(0, length).map((num) => `prop${num}`);
+  const values = _.range(0, length).map((num) => `values${num}`);
+
+  return {
+    props,
+    values,
+  }
+}
