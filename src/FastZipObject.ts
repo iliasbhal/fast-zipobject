@@ -38,6 +38,16 @@ export class FastZipObject {
       get(target: any, prop: string) {
         return target[prop] 
           || values[FastZipObject.getZipIndexOfProp(props)[prop]]
+      },
+      ownKeys: function() {
+        return propsCopy;
+      },
+      getOwnPropertyDescriptor() {
+        return {
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        };
       }
     });
   }
