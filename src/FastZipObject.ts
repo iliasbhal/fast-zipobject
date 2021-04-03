@@ -14,13 +14,31 @@ export class FastZipObject {
     return memoizedIndexes;
   };
 
+  static LENGTH_THRESHOLD = 11;
   static createZipObject(props: string[], values: string[]) {
-    const obj = new Proxy({} as Record<string, unknown>, {
-      get(target, prop: string) {
+    if (props.length >= FastZipObject.LENGTH_THRESHOLD) {
+      return FastZipObject.createProxyZipObject(props, values);
+    }
+
+    return FastZipObject.createSimpleZipObject(props, values);
+  }
+
+  static createSimpleZipObject(props: string[], values: string[]) {
+    let obj :Record<string, unknown> = {};
+
+    for(let i = 0; i < props.length; i++) {
+      obj[props[i]] = values[i];
+    }
+
+    return obj;
+  }
+
+  static createProxyZipObject(props: string[], values: string[]) {
+    return new Proxy({},  {
+      get(target: any, prop: string) {
         return target[prop] 
           || values[FastZipObject.getZipIndexOfProp(props)[prop]]
       }
     });
-    return obj;
   }
 }
