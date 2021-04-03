@@ -29,7 +29,26 @@ describe('fastZipObject', () => {
     expect(zipped.prop1).toEqual('bye');
   });
 
+  it('should not references of props to avoid memory leaks', () => {
+    const { props, values } = createPropsAndValues(FastZipObject.LENGTH_THRESHOLD);
+    const zipped = fastZipObject(props, values);
 
+    const sampleProp = props.pop()!;
+    props.splice(0);
+
+    expect(zipped[sampleProp]).toBeTruthy();
+  })
+
+  it('should not references of values to avoid memory leaks', () => {
+    const { props, values } = createPropsAndValues(FastZipObject.LENGTH_THRESHOLD);
+    const zipped = fastZipObject(props, values);
+
+    const sampleProp = props[0];
+    const expectedValue = values.shift()!;
+
+    values.splice(0);
+
+    expect(zipped[sampleProp]).toEqual(expectedValue);
 
   testSpeedImprovement(3, 1.5);
   testSpeedImprovement(5, 2);
