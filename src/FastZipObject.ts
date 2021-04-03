@@ -34,10 +34,13 @@ export class FastZipObject {
   }
 
   static createProxyZipObject(props: string[], values: string[]) {
+    const valuesCopy = [...values];
+    const propsCopy = [...props];
+
     return new Proxy({},  {
       get(target: any, prop: string) {
         return target[prop] 
-          || values[FastZipObject.getZipIndexOfProp(props)[prop]]
+          || valuesCopy[FastZipObject.getZipIndexOfProp(propsCopy)[prop]]
       },
       ownKeys: function() {
         return propsCopy;
