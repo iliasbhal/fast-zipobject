@@ -96,7 +96,6 @@ describe('fastZipObject', () => {
     expect(zipped[sampleProp]).toEqual(expectedValue);
   });
 
-
   const { CI } = process.env;
 
   testSpeedImprovement(3, CI ? 1.2 : 1.8);
