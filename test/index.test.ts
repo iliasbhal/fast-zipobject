@@ -70,7 +70,7 @@ describe('fastZipObject', () => {
     expect(properties).toMatchObject(values);
   });
 
-  it('should not references of props to avoid memory leaks', () => {
+  it('should not references props to avoid memory leaks', () => {
     const { props, values } = createPropsAndValues(
       FastZipObject.LENGTH_THRESHOLD
     );
@@ -82,7 +82,7 @@ describe('fastZipObject', () => {
     expect(zipped[sampleProp]).toBeTruthy();
   });
 
-  it('should not references of values to avoid memory leaks', () => {
+  it('should not references values to avoid memory leaks', () => {
     const { props, values } = createPropsAndValues(
       FastZipObject.LENGTH_THRESHOLD
     );
@@ -96,11 +96,14 @@ describe('fastZipObject', () => {
     expect(zipped[sampleProp]).toEqual(expectedValue);
   });
 
-  testSpeedImprovement(3, 1.4);
-  testSpeedImprovement(5, 1.5);
-  testSpeedImprovement(10, 1.9);
-  testSpeedImprovement(20, 3);
-  testSpeedImprovement(30, 4);
+
+  const { CI } = process.env;
+
+  testSpeedImprovement(3, CI ? 1.2 : 1.8);
+  testSpeedImprovement(5, CI ? 1.2 : 2);
+  testSpeedImprovement(10, CI ? 1.2 : 2);
+  testSpeedImprovement(20, CI ? 1.2 : 3);
+  testSpeedImprovement(30, CI ? 1.2 : 4);
 
   function testSpeedImprovement(
     numberOfProps: number,
